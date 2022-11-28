@@ -5,10 +5,14 @@ import { products } from "../../data";
 import uuid from "react-uuid";
 import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { Product } from "../../types/types";
-import { StyledLayout, Container, ItemsContainer, CartItem, SubTotalContainer } from "./styles";
-
-
+import { Bill, Product } from "../../types/types";
+import {
+  StyledLayout,
+  Container,
+  ItemsContainer,
+  CartItem,
+  SubTotalContainer,
+} from "./styles";
 
 const Cart = () => {
   const [cart, setCart] = useRecoilState(cartAtom);
@@ -22,11 +26,7 @@ const Cart = () => {
     }
   }, [id]);
 
-  const [billing, setBilling] = useState<{
-    subTotal: number;
-    shipping: number;
-    total: number;
-  }>({
+  let [billing, setBilling] = useState<Bill>({
     subTotal: 0,
     shipping: 0,
     total: 0,
@@ -35,14 +35,20 @@ const Cart = () => {
   useEffect(() => {
     let items: Product[] = products.filter((product) => cart.has(product.id));
     setCartItems(items);
+    let newBill: Bill = {
+      subTotal: 0,
+      shipping: 0,
+      total: 0,
+    };
     items.forEach((item) => {
-      setBilling({
-        ...billing,
-        subTotal: billing.subTotal + item.price,
-        shipping: billing.shipping + item.price * 0.01,
-        total: billing.total + item.price + item.price * 0.01,
-      });
+      newBill = {
+        ...newBill,
+        subTotal: newBill.subTotal + item.price,
+        shipping: newBill.shipping + item.price * 0.01,
+        total: newBill.total + item.price + item.price * 0.01,
+      };
     });
+    setBilling(newBill);
   }, [cart]);
 
   return (
