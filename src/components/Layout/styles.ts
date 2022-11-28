@@ -66,13 +66,13 @@ export const NavContainer = styled.div`
 
         svg {
           position: absolute;
-          z-index: 20;
+          z-index: 200;
           width: 2.6rem;
           height: 2.6rem;
         }
       }
       nav {
-        z-index: 10;
+        z-index: 150;
         position: absolute;
         left: 0;
         top: 0;
